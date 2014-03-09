@@ -10,4 +10,3 @@ int main()
     puts(b);
     return 0;
 }
-hello
