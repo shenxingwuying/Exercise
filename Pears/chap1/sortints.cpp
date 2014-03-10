@@ -8,7 +8,8 @@
 using namespace std;
 
 int main()
-{	set<int> S;
+{	
+    set<int> S;
 	int i;
 	set<int>::iterator j;
 	while (cin >> i)

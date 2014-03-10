@@ -6,14 +6,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int intcomp(int *x, int *y)
-{   return *x - *y;
+int intcomp(const void *x, const void *y)
+{   
+    return *(const int *)x - *(const int *)y;
 }
 
 int a[1000000];
 
 int main()
-{   int i, n=0;
+{   
+    int i, n=0;
     while (scanf("%d", &a[n]) != EOF)
         n++;
     qsort(a, n, sizeof(int), intcomp);
