@@ -7,12 +7,12 @@ objs=P1.o P2.o P3.o P4.o P5.o
 
 
 $(all):$(objs)
-        $(CC) -Wall -o P1 P1.o
-        $(CC) -Wall -o P2 P2.o -lm
-        $(CC) -Wall -o P3 P3.o -lm
-        $(CC) -Wall -o P4 P4.o -lm
-        $(CC) -Wall -o P5 P5.o -lm
+	$(CC) -Wall -o P1 P1.o
+	$(CC) -Wall -o P2 P2.o -lm
+	$(CC) -Wall -o P3 P3.o -lm
+	$(CC) -Wall -o P4 P4.o -lm
+	$(CC) -Wall -o P5 P5.o -lm
 $(objs):
 .PHONY : clean
 clean:
-        -rm $(PROGS) $(objs)
+	-rm $(PROGS) $(objs)

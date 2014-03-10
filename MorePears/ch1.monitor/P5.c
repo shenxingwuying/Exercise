@@ -11,7 +11,7 @@ int root(int n)
 }
 int prime(int n)
 {
-        int i, bound;
+        int i;
         if(n % 2 == 0)
          return (n == 2);
         if(n % 3 == 0)
