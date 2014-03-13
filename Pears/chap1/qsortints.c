@@ -23,3 +23,12 @@ int main()
         printf("%d\n", a[i]);
     return 0;
 }
+
+
+/*** 
+ * 读者注：By duyuqi
+ * 这是个单纯地 使用C语言库的快速排序
+ *  fix intcomp函数的 Warning
+ *
+ *
+ */

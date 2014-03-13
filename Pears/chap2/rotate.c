@@ -23,10 +23,11 @@ int x[MAXN];
 int rotdist, n;
 
 /* Alg 1: Rotate by reversal */
-
 void reverse(int i, int j)
-{	int t;
-	while (i < j) {
+{	
+    int t;
+	while (i < j) 
+    {
 		t = x[i]; x[i] = x[j]; x[j] = t;
 		i++;
 		j--;
@@ -34,19 +35,22 @@ void reverse(int i, int j)
 }
 
 void revrot(int rotdist, int n)
-{	reverse(0, rotdist-1);
+{	
+    reverse(0, rotdist-1);
 	reverse(rotdist, n-1);
 	reverse(0, n-1);
 }
 
 /* Alg 2: Juggling (dolphin) rotation */
-
 int gcd(int i, int j)
-{	int t;
-	while (i != 0) {
+{	
+    int t;
+	while (i != 0) 
+    {
 		if (j >= i)
 			j -= i;
-		else {
+		else 
+        {
 			t = i; i = j; j = t;
 		}
 	}
@@ -54,13 +58,16 @@ int gcd(int i, int j)
 }
 
 void jugglerot(int rotdist, int n)
-{	int cycles, i, j, k, t;
+{	
+    int cycles, i, j, k, t;
 	cycles = gcd(rotdist, n);
-	for (i = 0; i < cycles; i++) {
+	for (i = 0; i < cycles; i++) 
+    {
 		/* move i-th values of blocks */
 		t = x[i];
 		j = i;
-		for (;;) {
+		for (;;) 
+        {
 			k = j + rotdist;
 			if (k >= n)
 				k -= n;
@@ -74,7 +81,8 @@ void jugglerot(int rotdist, int n)
 }
 
 void jugglerot2(int rotdist, int n)
-{	int cycles, i, j, k, t;
+{	
+    int cycles, i, j, k, t;
 	cycles = gcd(rotdist, n);
 	for (i = 0; i < cycles; i++) {
 		/* move i-th values of blocks */
@@ -97,9 +105,9 @@ void jugglerot2(int rotdist, int n)
 }
 
 /* Alg 3: Recursive rotate (using gcd structure) */
-
 void swap(int i, int j, int k) /* swap x[i..i+k-1] with x[j..j+k-1] */
-{	int t;
+{	
+    int t;
 	while (k-- > 0) {
 		t = x[i]; x[i] = x[j]; x[j] = t;
 		i++;
@@ -109,22 +117,27 @@ void swap(int i, int j, int k) /* swap x[i..i+k-1] with x[j..j+k-1] */
 }
 
 void gcdrot(int rotdist, int n)
-{	int i, j, p;
+{	
+    int i, j, p;
 	if (rotdist == 0 || rotdist == n)
 		return;
 	i = p = rotdist;
 	j = n - p;
-	while (i != j) {
+	while (i != j) 
+    {
 		/* invariant:
 			x[0  ..p-i  ] is in final position
 			x[p-i..p-1  ] = a (to be swapped with b)
 			x[p  ..p+j-1] = b (to be swapped with a)
 			x[p+j..n-1  ] in final position
 		*/
-		if (i > j) {
+		if (i > j) 
+        {
 			swap(p-i, p, j);
 			i -= j;
-		} else {
+		} 
+        else 
+        {
 			swap(p-i, p+j-i, i);
 			j -= i;
 		}
@@ -133,9 +146,11 @@ void gcdrot(int rotdist, int n)
 }
 
 int isogcd(int i, int j)
-{	if (i == 0) return j;
+{	
+    if (i == 0) return j;
 	if (j == 0) return i;
-	while (i != j) {
+	while (i != j) 
+    {
 		if (i > j)
 			i -= j;
 		else 
@@ -152,9 +167,9 @@ void testgcd()
 }
 
 /* Test all algs */
-
 void slide(int rotdist, int n) /* Benchmark: slide left rotdist (lose 0..rotdist-1) */
-{	int i;
+{	
+    int i;
 
 	for (i = rotdist; i < n; i++)
 		x[i-rotdist] = x[i];
@@ -168,7 +183,8 @@ void initx()
 }
 
 void printx()
-{	int i;
+{	
+    int i;
 	for (i = 0; i < n; i++)
 		printf(" %d", x[i]);
 	printf("\n");
@@ -182,7 +198,8 @@ void roterror()
 }
 
 void checkrot()
-{	int i;
+{	
+    int i;
 	for (i = 0; i < n-rotdist; i++)
 		if (x[i] != i+rotdist)
 			roterror();
@@ -192,9 +209,12 @@ void checkrot()
 }
 
 void testrot()
-{	for (n = 1; n <= 20; n++) {
+{	
+    for (n = 1; n <= 20; n++) 
+    {
 		printf(" testing n=%d\n", n);
-		for (rotdist = 0; rotdist <= n; rotdist++) {
+		for (rotdist = 0; rotdist <= n; rotdist++) 
+        {
 			/* printf("  testing rotdist=%d\n", rotdist); */
 			initx(); revrot(rotdist, n);     checkrot();
 			initx(); jugglerot(rotdist, n);  checkrot();
@@ -205,13 +225,15 @@ void testrot()
 }
 
 /* Timing */
-
 void timedriver()
-{	int i, algnum, numtests, start, clicks;
-	while (scanf("%d %d %d %d", &algnum, &numtests, &n, &rotdist) != EOF) {
+{	
+    int i, algnum, numtests, start, clicks;
+	while (scanf("%d %d %d %d", &algnum, &numtests, &n, &rotdist) != EOF) 
+    {
 		initx();
 		start = clock();
-		for (i = 0; i < numtests; i++) {
+		for (i = 0; i < numtests; i++) 
+        {
 			if (algnum == 1)
 				revrot(rotdist, n);
 			else if (algnum == 2)
@@ -233,7 +255,8 @@ void timedriver()
 /* Main */
 
 int main()
-{	/* testrot(); */
+{	
+    /* testrot(); */
 	timedriver();
 	return 0;
 }

@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
 }
 
 /**  求 小于n，且没有重复的k个整数
- *   读者注：by dyq
+ *   读者注：by duyuqi
  *   思路：打散前n个数的位置，然后输出前n个数
  *  扩展： 求 n个数，随机的k个不重复的数
  */
