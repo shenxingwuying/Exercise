@@ -1,20 +1,15 @@
 <?php
 
-
-function SetFebruary($year, &$days)
-{
-    if ($year%100 == 0)
-    {
-        if ($year%400 == 0)
-        {
+function SetFebruary($year, &$days) {
+    if ($year%100 == 0) {
+        if ($year%400 == 0) {
             $February = 29;
             $days = 366;
         }
         else
             $February = 28;
     }
-    elseif ($year%4==0)
-    {
+    elseif ($year%4==0) {
         $February = 29;
         $days = 366;
     }
@@ -51,17 +46,14 @@ $year = trim(fgets($stdin, 256));
 $months[2] = SetFebruary($year, $days);
 
 
-if($year < $baseyear)
-{
+if($year < $baseyear) {
     for ($i=$baseyear; $i != $year; $i--)
         if(SetFebruary($i, $tmp) == 28)
             $base -= 1;
         else
             $base -= 2;
     $base %= 7;
-}
-else
-{
+} else {
     for ($i=$baseyear; $i != $year; $i--)
         if(SetFebruary($i, $tmp) == 28)
             $base += 1;
@@ -71,26 +63,21 @@ else
 }
 
 $first = $base;
-foreach($months as $mon)
-{
+foreach($months as $key => $mon) {
+    echo "=============$year-$key================\n";
     echo "Sun\tMon\tTues\tWed\tThurs\tFri\tSat\n";
-    for($i=0; $i < $first; $i++)
-    {
+    for($i=0; $i < $first; $i++) {
         echo "\t";
     }
-    for($i = 1; $i <= $mon; $i++)
-    {
+    for($i = 1; $i <= $mon; $i++) {
         echo "$i\t";
         $first += 1;
-        if($first%7 == 0 )
-        {
+        if($first%7 == 0 ) {
             echo "\n";
             $first %= 7;
         }
     }
     echo "\n";
 }
-echo "days:$days\n";
-
 
 ?>

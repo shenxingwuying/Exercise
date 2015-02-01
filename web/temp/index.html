@@ -1,0 +1,13 @@
+define perror
+    p *__errno_location()
+end
+
+define pespaddr
+    set $stub = ($arg0)&0xffff
+    set $port = ($arg0>>16)&0xffff
+    set $part1 = ($arg0>>32)&0xff
+    set $part2 = ($arg0>>40)&0xff
+    set $part3 = ($arg0>>48)&0xff
+    set $part4 = ($arg0>>56)&0xff
+    printf "%d.%d.%d.%d:%d:%d\n", $part1, $part2, $part3, $part4, $port, $stub
+end

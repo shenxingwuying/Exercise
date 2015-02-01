@@ -1,0 +1,68 @@
+#!/bin/bash
+
+OK=0
+FALSE=1
+DISK_TH=52428800
+USER="nfs"
+CCDBFILEDIR="nfsdata"
+
+function add_user_ccdbfs() {
+	useradd $USER
+	mkdir -p /home/$USER/.ssh
+	chmod 755 /home/$USER/.ssh
+	chmod 644 /home/$USER/.ssh/authorized_keys
+	chown $USER:$USER /home/$USER
+	chown $USER:$USER /home/$USER/.ssh
+}   
+function create_dir() {
+	cat /proc/mounts | grep "^/dev" | grep -v root | while read LINE; do
+		DEV=`echo ${LINE}|awk '{print $1}'|sed 's/\/dev\///'`
+		mount=`echo ${LINE}|awk '{print $2}'`
+		spacesize=`cat /proc/partitions|grep "${DEV}$" | awk '{print $(NF-1)}'`
+        	if [ "$spacesize" -gt $DISK_TH ]; then
+			mkdir -p $mount/$CCDBFILEDIR
+			mkdir -p $mount/$USER
+			chmod 755 $mount/$CCDBFILEDIR
+			chmod 755 $mount/$USER 
+			chown -R $USER:$USER $mount/$CCDBFILEDIR
+			chown -R $USER:$USER $mount/$USER
+        	fi
+    done 
+}
+function add_nfs_crontab() {
+	crontab -u nfs -l | sed "/nfs-init-cmd.spider.all/d" >/tmp/$$.nfs.crontab
+	echo '* * * * * eval `get_instance_by_service -c nfs-init-cmd.spider.all | sed ":a;N;s/\n//g;ta"|sed -e "s#^{##" | sed  "s/}$//" |sed -e "s#\",\"#\"\n\"#g"|sed -ne "/env_init_cmd/s#\"env_init_cmd\":\"\(.*\)\"#\1#p"` &>/dev/null ' >>/tmp/$$.nfs.crontab
+	crontab -u nfs /tmp/$$.nfs.crontab
+	rm /tmp/$$.nfs.crontab
+}
+function install_kernal_mo() {
+    rm -rf install_speed2.sh 
+    wget --quiet http://ikernel.baidu.com/nfs/speed2_ko_for_nfs/install_speed2.sh
+    if [ $? != 0 ]; then
+	echo "wget install_speed2.sh failed"
+    fi
+
+    echo "remove old speed2 module"
+    rmmod speed2 > /dev/null 2>&1
+    sh install_speed2.sh
+    if [ $? != 0 ]; then
+        exit 1
+    fi
+    echo "installed speed2"
+    echo 
+
+    kernal_version=`uname -r | cut -d_ -f1`
+    if [ "$kernal_version" == "2.6.9" ]; then
+        echo "***warning 2.6.9 kernal, ignore cgroup"
+        return
+    fi
+    if [ -f /bin/cglimit ]; then
+        echo "has installed cglimit"
+        return 
+    fi
+}
+
+add_user_ccdbfs
+create_dir
+add_nfs_crontab
+install_kernal_mo
